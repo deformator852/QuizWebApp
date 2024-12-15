@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{{ title }}</title>
+        <link rel="stylesheet" href="{% static 'quiz/css/base.css' %}" />
+        {% block styles %}
+        {% endblock styles %}
+    </head>
+    <body>
+        <header class="header">
+            <div class="header__wrapper">
+                <menu class="header__menu">
+                    <li class="header__menu-element header__logo">
+                        <a href="/">Quizy.com</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="header__menu-element header__auth">
+                            <a href="{% url "logout" %}">Sign Out</a>
+                        </li>
+                    {% else %}
+                        <li class="header__menu-element header__auth">
+                            <a href="{% url "login" %}">Log In</a>
+                        </li>
+                    {% endif %}
+                </menu>
+            </div>
+        </header>
+        <main class="main">
+            {% block content %}
+            {% endblock content %}
+        </main>
+    </body>
+</html>
