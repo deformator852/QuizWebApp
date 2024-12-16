@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth import authenticate, login, logout
 
 
 class Login(View):
@@ -11,17 +12,36 @@ class Login(View):
         return render(request, "accounts/login.html", context)
 
     def post(self, request):
-        pass
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
+            user = authenticate(request, username=username, password=password)
+            if user:
+                login(request, user)
+                return redirect("home")
+        context = {"form": form}
+        return render(request, "accounts/login.html", context)
 
 
 class Logout(View):
-    def post(self, request):
-        pass
+    def get(self, request):
+        logout(request)
+        return redirect("home")
 
 
 class Registration(View):
     def get(self, request):
-        return render(request, "accounts/registration.html")
+        context = {}
+        form = UserCreationForm()
+        context["form"] = form
+        return render(request, "accounts/registration.html", context)
 
     def post(self, request):
-        pass
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("login")
+        else:
+            context = {"form": form}
+            return render(request, "accounts/registration.html", context)
