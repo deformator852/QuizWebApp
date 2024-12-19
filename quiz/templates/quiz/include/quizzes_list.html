@@ -1,10 +1,13 @@
 <div class="quizzes-list">
-    {% for quiz in quizzes %}
+  {% for quiz in quizzes %}
     <a href="{{ quiz.get_absolute_url }}">
       <div class="quiz">
-        <p class="quiz__title">{{quiz.title}}</p>
-        <img class="quiz__image" src="{{MEDIA_URL}}{{quiz.thumbnail}}"/>
+        <p class="quiz__title">{{ quiz.title }}</p>
+        <img class="quiz__image" src="{{ MEDIA_URL }}{{ quiz.thumbnail }}" />
       </div>
     </a>
-    {% endfor %}
+  {% endfor %}
+  <menu class="asdadd">
+  </menu>
+  <img src="" alt="">
 </div>

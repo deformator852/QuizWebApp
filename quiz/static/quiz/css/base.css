@@ -57,6 +57,11 @@ body {
   padding: 0 35px 0 35px;
 }
 
+.main {
+  display: flex;
+  justify-content: center;
+}
+
 *,
 *::after,
 *::before {
@@ -100,4 +105,66 @@ body {
 .quizzes-list a:hover {
   text-decoration-color: #f56042;
   font-size: 20px;
+}
+
+.choices {
+  display: flex;
+  justify-content: center;
+}
+
+.main__wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.quiz__questions {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.quiz__send-answer {
+  border: 0;
+  background-color: #f56042;
+  width: 200px;
+  height: 50px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.quiz__send-answer:hover {
+  box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.3), -4px -6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.choice {
+  width: 100%;
+  text-wrap: nowrap;
+  height: 50px;
+  background-color: #f56042;
+  margin-top: 40px;
+  margin-right: 20px;
+  margin-bottom: 40px;
+  font-weight: 600;
+  display: flex;
+  padding: 0 20px 0 20px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.choice:hover {
+  box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.3), -4px -6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.current-chose {
+  box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.3), -4px -6px 12px rgba(0, 0, 0, 0.2);
+}
+
+label {
+  margin-top: .3rem;
+  cursor: pointer;
+}
+
+input[type="radio"] {
+  appearance: none;
 }
