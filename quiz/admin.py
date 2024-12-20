@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Quiz, Choice, Question
+from .models import Quiz, Choice, Question, UserQuizResult
 
 
 class ChoiceInline(admin.TabularInline):
@@ -16,3 +16,6 @@ class QuestionInline(admin.TabularInline):
 class QuizAdmin(admin.ModelAdmin):
     list_display = ("title", "description")
     inlines = [QuestionInline, ChoiceInline]
+
+
+admin.site.register(UserQuizResult)

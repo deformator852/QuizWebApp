@@ -36,3 +36,6 @@ class UserQuizResult(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     score = models.IntegerField()
     completed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"User {self.user.username} quiz result"

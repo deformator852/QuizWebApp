@@ -2,6 +2,18 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import authenticate, login, logout
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from quiz.models import UserQuizResult
+
+
+@method_decorator(login_required, name="dispatch")
+class Account(View):
+    def get(self, request):
+        context = {}
+        quizzes = UserQuizResult.objects.filter(user=request.user)
+        context["quizzes"] = quizzes
+        return render(request, "accounts/account.html", context)
 
 
 class Login(View):

@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="main__wrapper">
-        {% if finish %}<h1>Congratulations</h1>{% endif %}
+        {% if quiz_result_exist %}<h1>You have finished this quiz already!Your score: {{ score }}</h1>{% endif %}
+        {% if finish %}<h1>Congratulations.Score - {{ score }}</h1>{% endif %}
         <form class="quiz__questions" action="" method="POST">
             {% csrf_token %}
             {% for q in question %}<h1>{{ q.text }}</h1>{% endfor %}

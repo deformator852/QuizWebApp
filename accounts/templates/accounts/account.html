@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <div class="quizzes-result">
+        {% for quiz in quizzes %}
+            <div class="quiz-result">
+                <h5 class="quizzes-result__quizz-name">{{ quiz.quiz.title }}</h5>
+                <p>Score: {{ quiz.score }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}

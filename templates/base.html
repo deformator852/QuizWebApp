@@ -22,7 +22,7 @@
                     </li>
                     {% if user.is_authenticated %}
                         <li class="header__menu-element">
-                            <a href="#">Account</a>
+                            <a href="{% url "account" %}">Account</a>
                         </li>
                         <li class="header__menu-element header__auth">
                             <a href="{% url "logout" %}">Sign Out</a>

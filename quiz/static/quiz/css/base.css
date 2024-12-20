@@ -168,3 +168,20 @@ label {
 input[type="radio"] {
   appearance: none;
 }
+
+.quizzes-result {
+  width: 100%;
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(8, 200px);
+  gap: 10px;
+}
+
+.quiz-result {
+  border: 1px solid #f56042;
+  min-width: 200px;
+  max-width: 100%;
+  width: 200px;
+  height: 70px;
+  padding-left: 8px;
+}
