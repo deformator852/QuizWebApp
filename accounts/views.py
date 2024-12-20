@@ -4,14 +4,14 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from quiz.models import UserQuizResult
+from quiz.services import get_user_quizzes_results
 
 
 @method_decorator(login_required, name="dispatch")
 class Account(View):
     def get(self, request):
         context = {}
-        quizzes = UserQuizResult.objects.filter(user=request.user)
+        quizzes = get_user_quizzes_results(request.user)
         context["quizzes"] = quizzes
         return render(request, "accounts/account.html", context)
 
