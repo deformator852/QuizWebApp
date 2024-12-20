@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <div class="quizzes-result">
+    <div class="quizzes-results">
         {% for quiz in quizzes %}
             <div class="quiz-result">
                 <h5 class="quizzes-result__quizz-name">{{ quiz.quiz.title }}</h5>

@@ -1,16 +1,26 @@
 from django.http import Http404, HttpRequest
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.views import View
-from .models import Question, Quiz, Choice, UserQuizResult
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from .services import (
+    correct_answers_count,
+    create_user_quiz_result,
+    get_all_quizzes,
+    get_choices_for_questions,
+    get_next_question,
+    get_user_quiz_result,
+    quiz_exists,
+    quiz_results_exists,
+)
 
 
 class Home(View):
     def get(self, request):
         context = {}
         if request.user.is_authenticated:
-            quizzes = Quiz.objects.all()
+            quizzes = get_all_quizzes()
             context["quizzes"] = quizzes
         return render(request, "quiz/index.html", context)
 
@@ -19,23 +29,22 @@ class Home(View):
 class QuizPage(View):
     def get(self, request: HttpRequest, pk=None):
         if pk is not None:
+            user = request.user
             context = {}
-            if UserQuizResult.objects.filter(user=request.user, quiz=pk).exists():
-                user_quiz_result = UserQuizResult.objects.get(
-                    user=request.user, quiz=pk
-                )
+            if quiz_results_exists(user, pk):
+                user_quiz_result = get_user_quiz_result(user, pk)
                 context["quiz_result_exist"] = True
                 context["score"] = user_quiz_result.score
                 return render(request, "quiz/quiz.html", context)
-            quiz = Quiz.objects.filter(pk=pk).exists()
+            quiz = quiz_exists(pk)
             if quiz is None:
                 raise Http404()
             request.session["quiz_id"] = pk
             step = request.session.get("step", None)
             if step is None:
                 step = request.session["step"] = 1
-            question = Question.objects.all()[step - 1 : step]
-            choices = Choice.objects.filter(question=question)
+            question = get_next_question(step)
+            choices = get_choices_for_questions(question)
             context["question"] = question
             context["choices"] = choices
             return render(request, "quiz/quiz.html", context)
@@ -46,14 +55,13 @@ class QuizPage(View):
         context = {}
         step = request.session["step"]
         if step >= 12:
-            context["finish"] = True
             choices = request.session["choices"]
-            answers = Choice.objects.filter(pk__in=choices, is_correct=True)
-            score = len(answers)
-            context["score"] = score
+            quiz_id = request.session["quiz_id"]
             user = request.user
-            quiz = Quiz.objects.get(pk=request.session["quiz_id"])
-            UserQuizResult.objects.create(user=user, quiz=quiz, score=score)
+            score = correct_answers_count(choices)
+            create_user_quiz_result(score, quiz_id, user)
+            context["finish"] = True
+            context["score"] = score
             del request.session["choices"]
             del request.session["step"]
             del request.session["quiz_id"]
@@ -65,8 +73,4 @@ class QuizPage(View):
         else:
             request.session["choices"].append(answer_id)
         step = request.session["step"] = step + 1
-        question = Question.objects.all()[step - 1 : step]
-        choices = Choice.objects.filter(question=question)
-        context["question"] = question
-        context["choices"] = choices
-        return render(request, "quiz/quiz.html", context)
+        return redirect(reverse("quiz", kwargs={"pk": pk}))
